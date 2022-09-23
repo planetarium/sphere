@@ -21,8 +21,8 @@ export interface Account {
    */
   readonly VERSION: number;
 
-	getPublicKey(): Promise<string>;
-	getAddress(): Promise<string>;
+  getPublicKey(): Promise<string>;
+  getAddress(): Promise<string>;
   /**
    * Sign a given bytes. The function must return a valid ECDSA signature.
    *
@@ -47,7 +47,7 @@ export async function signTransaction(
     value: [Integer.fromBigInt(signature.r), Integer.fromBigInt(signature.s)],
   }).toBER(false);
 
-  decodedTx.set(new Uint8Array([0x53]).buffer, encodedSignature)
+  decodedTx.set(new Uint8Array([0x53]).buffer, encodedSignature);
 
-  return encode(decodedTx);
+  return encode(decodedTx)?.toString("hex");
 }

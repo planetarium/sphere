@@ -127,6 +127,7 @@ __metadata:
   dependencies:
     asn1js: ^3.0.5
     bencodex: ^0.1.1
+    nanobundle: ^0.0.28
   languageName: unknown
   linkType: soft
 
