@@ -102,6 +102,6 @@
   },
   "references": [
     { "path": "packages/sign" },
-    { "path": "packages/account-raw" }
+    { "path": "packages/account-local" }
   ]
 }

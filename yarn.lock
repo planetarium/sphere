@@ -132,6 +132,8 @@ __metadata:
 "@planetarium/account-local@workspace:packages/account-local":
   version: 0.0.0-use.local
   resolution: "@planetarium/account-local@workspace:packages/account-local"
+  dependencies:
+    "@planetarium/sign": "workspace:^"
   languageName: unknown
   linkType: soft
 

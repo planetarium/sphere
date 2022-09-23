@@ -1,5 +1,8 @@
 {
   "name": "@planetarium/account-local",
   "version": "0.0.0",
-  "license": "LGPL"
+  "license": "LGPL",
+  "dependencies": {
+    "@planetarium/sign": "workspace:^"
+  }
 }
