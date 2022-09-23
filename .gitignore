@@ -5,3 +5,8 @@
 !.yarn/releases
 !.yarn/sdks
 !.yarn/versions
+
+**/*.d.ts
+**/*.cjs
+**/*.mjs
+**/*.map
