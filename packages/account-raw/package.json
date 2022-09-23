@@ -3,6 +3,7 @@
   "version": "0.0.0",
   "license": "LGPL",
   "dependencies": {
+    "@noble/hashes": "^1.1.2",
     "@noble/secp256k1": "^1.7.0",
     "@planetarium/sign": "workspace:^"
   }

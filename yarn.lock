@@ -88,6 +88,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@noble/hashes@npm:^1.1.2":
+  version: 1.1.2
+  resolution: "@noble/hashes@npm:1.1.2"
+  checksum: 3c2a8cb7c2e053811032f242155d870c5eb98844d924d69702244d48804cb03b42d4a666c49c2b71164420d8229cb9a6f242b972d50d5bb2f1d673b98b041de2
+  languageName: node
+  linkType: hard
+
 "@noble/secp256k1@npm:^1.7.0":
   version: 1.7.0
   resolution: "@noble/secp256k1@npm:1.7.0"
@@ -132,6 +139,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@planetarium/account-raw@workspace:packages/account-raw"
   dependencies:
+    "@noble/hashes": ^1.1.2
     "@noble/secp256k1": ^1.7.0
     "@planetarium/sign": "workspace:^"
   languageName: unknown
