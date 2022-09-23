@@ -1,5 +1,12 @@
 {
 	"name": "@planetarium/sign",
 	"version": "0.0.0",
-	"license": "LGPL"
+	"license": "LGPL",
+	"source": "index.ts",
+	"module": "dist/index.mjs",
+	"main": "dist/index.cjs",
+	"dependencies": {
+		"asn1js": "^3.0.5",
+		"bencodex": "^0.1.1"
+	}
 }
