@@ -21,14 +21,14 @@ export interface Account {
    */
   readonly VERSION: number;
 
-  getPublicKey(): Promise<string>;
+  getPublicKey(): Promise<ArrayBuffer>;
   getAddress(): Promise<string>;
   /**
    * Sign a given bytes. The function must return a valid ECDSA signature.
    *
    * @param data A payload to sign.
    */
-  sign(hash: ArrayBuffer): Promise<Signature>;
+  sign(hash: ArrayBuffer): Promise<Signature | ArrayBuffer>;
 }
 
 export const ACCOUNT_VERSION = 0;
@@ -37,7 +37,8 @@ export async function signTransaction(
   tx: string,
   account: Account
 ): Promise<string> {
-  if (account.VERSION !== ACCOUNT_VERSION) throw new Error("The Account interface version doesn't match.");
+  if (account.VERSION !== ACCOUNT_VERSION)
+    throw new Error("The Account interface version doesn't match.");
 
   const txBinary = fromHexString(tx);
   const decodedTx: BencodexDict = decode(txBinary);
@@ -45,9 +46,15 @@ export async function signTransaction(
   const hash = await crypto.subtle.digest("SHA-256", txBinary);
   const signature = await account.sign(hash);
 
-  const encodedSignature = new Sequence({
-    value: [Integer.fromBigInt(signature.r), Integer.fromBigInt(signature.s)],
-  }).toBER(false);
+  const encodedSignature =
+    "r" in signature
+      ? new Sequence({
+          value: [
+            Integer.fromBigInt(signature.r),
+            Integer.fromBigInt(signature.s),
+          ],
+        }).toBER(false)
+      : signature;
 
   decodedTx.set(new Uint8Array([0x53]).buffer, encodedSignature);
 
