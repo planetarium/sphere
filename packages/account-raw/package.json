@@ -1,0 +1,9 @@
+{
+  "name": "@planetarium/account-raw",
+  "version": "0.0.0",
+  "license": "LGPL",
+  "dependencies": {
+    "@noble/secp256k1": "^1.7.0",
+    "@planetarium/sign": "workspace:^"
+  }
+}
