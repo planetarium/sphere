@@ -37,6 +37,8 @@ export async function signTransaction(
   tx: string,
   account: Account
 ): Promise<string> {
+  if (account.VERSION !== ACCOUNT_VERSION) throw new Error("The Account interface version doesn't match.");
+
   const txBinary = fromHexString(tx);
   const decodedTx: BencodexDict = decode(txBinary);
 
