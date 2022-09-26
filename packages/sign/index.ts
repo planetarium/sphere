@@ -1,6 +1,7 @@
-import { fromHexString } from "./util";
+import { fromHexString, toChecksum, toHexString } from "./util";
 import { Sequence, Integer } from "asn1js";
 import { encode, decode, BencodexDict } from "bencodex";
+import { keccak_256 } from "@noble/hashes/sha3";
 
 export interface Signature {
   r: bigint;
@@ -58,4 +59,14 @@ export async function signTransaction(
   decodedTx.set(new Uint8Array([0x53]).buffer, encodedSignature);
 
   return encode(decodedTx)?.toString("hex");
+}
+
+export async function deriveAddress(account: Account) {
+  const publicKey = await account.getPublicKey();
+  return (
+    "0x" +
+    toChecksum(
+      toHexString(keccak_256(new Uint8Array(publicKey).slice(1))).slice(-40)
+    )
+  );
 }
