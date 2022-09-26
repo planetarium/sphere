@@ -1,7 +1,8 @@
-import { fromHexString, toChecksum, toHexString } from "./util";
+import { toChecksum } from "./util";
 import { Sequence, Integer } from "asn1js";
 import { encode, decode, BencodexDict } from "bencodex";
 import { keccak_256 } from "@noble/hashes/sha3";
+import { bytesToHex, hexToBytes } from "@noble/hashes/utils";
 
 export interface Signature {
   r: bigint;
@@ -40,7 +41,7 @@ export async function signTransaction(
   if (account.VERSION !== ACCOUNT_VERSION)
     throw new Error("The Account interface version doesn't match.");
 
-  const txBinary = fromHexString(tx);
+  const txBinary = hexToBytes(tx);
   const decodedTx: BencodexDict = decode(txBinary);
 
   const hash = await crypto.subtle.digest("SHA-256", txBinary);
@@ -66,7 +67,7 @@ export async function deriveAddress(account: Account) {
   return (
     "0x" +
     toChecksum(
-      toHexString(keccak_256(new Uint8Array(publicKey).slice(1))).slice(-40)
+      bytesToHex(keccak_256(new Uint8Array(publicKey).slice(1))).slice(-40)
     )
   );
 }
