@@ -2,9 +2,19 @@
   "name": "@planetarium/account-raw",
   "version": "0.0.0",
   "license": "LGPL",
+	"source": "index.ts",
+	"module": "dist/index.mjs",
+	"main": "dist/index.cjs",
+	"types": "dist/index.d.ts",
   "dependencies": {
     "@noble/hashes": "^1.1.2",
     "@noble/secp256k1": "^1.7.0",
     "@planetarium/sign": "workspace:^"
+  },
+  "devDependencies": {
+    "nanobundle": "^0.0.28"
+  },
+  "scripts": {
+    "build": "nanobundle build"
   }
 }

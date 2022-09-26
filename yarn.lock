@@ -142,6 +142,7 @@ __metadata:
     "@noble/hashes": ^1.1.2
     "@noble/secp256k1": ^1.7.0
     "@planetarium/sign": "workspace:^"
+    nanobundle: ^0.0.28
   languageName: unknown
   linkType: soft
 
