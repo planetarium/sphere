@@ -1,18 +1,20 @@
 import { Account } from "../sign";
 import { KEYSTORE_PATH } from "./util";
-import fs from "fs";
+import Wallet from "ethereumjs-wallet";
+import secp from "@noble/secp256k1";
+import fs from "fs/promises";
 import path from "path";
 
-export function listAccounts(
+export async function listAccounts(
   folder: string | undefined = KEYSTORE_PATH[process.platform]
-): string[] {
-  if (typeof folder === "string" && !fs.existsSync(folder)) {
+): Promise<string[]> {
+  if (typeof folder === "string" && !fs.stat(folder)) {
     throw new Error("This path does not exists.");
   } else if (typeof folder !== "string") {
     throw new Error("Invalid path value.");
   }
-  const list = fs
-    .readdirSync(folder)
+  const list = (await fs
+    .readdir(folder))
     .filter((f) =>
       f.match(
         /^UTC--\d{4}-\d\d-\d\dT\d\d-\d\d-\d\dZ--([\da-f]{8}-?(?:[\da-f]{4}-?){3}[\da-f]{12})$/i
@@ -27,8 +29,31 @@ export function listAccounts(
   return list;
 }
 
-export function createAccount(folder?: string): Account {
+export async function getAccountFrom(
+  passphrase: string,
+  uuid: string,
+  folder?: string
+): Promise<Account> {
+  const privKey: Wallet = await Wallet.fromV3(
+    fs
+      .readFile(
+        (await listAccounts(folder)).filter((v) =>
+          v.toLowerCase().includes(uuid?.toLowerCase())
+        )[0]
+      )
+      .toString(),
+    passphrase
+  );
+
   return {
     VERSION: 0,
+    async getPublicKey() {
+      return privKey.getPublicKey().buffer
+    },
+    sign(hash) {
+      return secp
+        .sign(new Uint8Array(hash), privKey.getPrivateKeyString())
+        .then((array) => array.buffer);
+    },
   };
 }
