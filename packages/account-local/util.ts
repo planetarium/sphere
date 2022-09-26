@@ -1,3 +1,6 @@
+import { homedir } from "os";
+import path from "path";
+
 const WIN_KEYSTORE_PATH = path.join(
     homedir(),
     "AppData",
@@ -22,16 +25,17 @@ const WIN_KEYSTORE_PATH = path.join(
     );
   
   export const KEYSTORE_PATH: {
-    [k in NodeJS.Platform]: string | null;
+    [k in NodeJS.Platform]: string | undefined;
   } = {
-    aix: null,
-    android: null,
+    aix: undefined,
+    android: undefined,
     darwin: MAC_KEYSTORE_PATH,
-    freebsd: null,
+    freebsd: undefined,
     linux: LINUX_KEYSTORE_PATH,
-    openbsd: null,
-    sunos: null,
+    openbsd: undefined,
+    sunos: undefined,
     win32: WIN_KEYSTORE_PATH,
     cygwin: WIN_KEYSTORE_PATH,
-    netbsd: null,
+    netbsd: undefined,
+    haiku: undefined,
   };
