@@ -22,7 +22,6 @@ export interface Account {
   readonly VERSION: number;
 
   getPublicKey(): Promise<ArrayBuffer>;
-  getAddress(): Promise<string>;
   /**
    * Sign a given bytes. The function must return a valid ECDSA signature.
    *
