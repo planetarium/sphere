@@ -150,6 +150,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "@planetarium/sign@workspace:packages/sign"
   dependencies:
+    "@noble/hashes": ^1.1.2
     asn1js: ^3.0.5
     bencodex: ^0.1.1
     nanobundle: ^0.0.28

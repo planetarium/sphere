@@ -1,6 +1,8 @@
-import { fromHexString } from "./util";
+import { toChecksum } from "./util";
 import { Sequence, Integer } from "asn1js";
 import { encode, decode, BencodexDict } from "bencodex";
+import { keccak_256 } from "@noble/hashes/sha3";
+import { bytesToHex, hexToBytes } from "@noble/hashes/utils";
 
 export interface Signature {
   r: bigint;
@@ -22,7 +24,6 @@ export interface Account {
   readonly VERSION: number;
 
   getPublicKey(): Promise<ArrayBuffer>;
-  getAddress(): Promise<string>;
   /**
    * Sign a given bytes. The function must return a valid ECDSA signature.
    *
@@ -40,7 +41,7 @@ export async function signTransaction(
   if (account.VERSION !== ACCOUNT_VERSION)
     throw new Error("The Account interface version doesn't match.");
 
-  const txBinary = fromHexString(tx);
+  const txBinary = hexToBytes(tx);
   const decodedTx: BencodexDict = decode(txBinary);
 
   const hash = await crypto.subtle.digest("SHA-256", txBinary);
@@ -59,4 +60,14 @@ export async function signTransaction(
   decodedTx.set(new Uint8Array([0x53]).buffer, encodedSignature);
 
   return encode(decodedTx)?.toString("hex");
+}
+
+export async function deriveAddress(account: Account) {
+  const publicKey = await account.getPublicKey();
+  return (
+    "0x" +
+    toChecksum(
+      bytesToHex(keccak_256(new Uint8Array(publicKey).slice(1))).slice(-40)
+    )
+  );
 }
