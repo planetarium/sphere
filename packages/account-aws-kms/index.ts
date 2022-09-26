@@ -4,7 +4,7 @@ import {
   SignCommand,
   GetPublicKeyCommand,
 } from "@aws-sdk/client-kms";
-import { Sequence } from "asn1js";
+import { parseSubjectPublicKeyInfo } from "./parseAsn1";
 
 export function createAccount(client: KMSClient, KeyId: string): Account {
   return {
@@ -16,10 +16,7 @@ export function createAccount(client: KMSClient, KeyId: string): Account {
         })
       );
       if (!publicKey) throw new TypeError("Received publicKey is undefined");
-      const parsed = new Sequence({
-        valueBeforeDecode: publicKey,
-      });
-      return parsed.valueBlock.value[1].valueBeforeDecodeView;
+      return parseSubjectPublicKeyInfo(publicKey);
     },
     async sign(hash) {
       const { Signature: signature } = await client.send(
