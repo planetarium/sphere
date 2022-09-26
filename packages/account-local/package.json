@@ -2,7 +2,17 @@
   "name": "@planetarium/account-local",
   "version": "0.0.0",
   "license": "LGPL",
+  "source": "index.ts",
+  "module": "dist/index.mjs",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
   "dependencies": {
     "@planetarium/sign": "workspace:^"
+  },
+  "devDependencies": {
+    "nanobundle": "^0.0.28"
+  },
+  "scripts": {
+    "build": "nanobundle build"
   }
 }

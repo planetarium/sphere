@@ -134,6 +134,7 @@ __metadata:
   resolution: "@planetarium/account-local@workspace:packages/account-local"
   dependencies:
     "@planetarium/sign": "workspace:^"
+    nanobundle: ^0.0.28
   languageName: unknown
   linkType: soft
 
