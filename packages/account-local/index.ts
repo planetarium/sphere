@@ -1,9 +1,9 @@
 import { Account } from "../sign";
 import { KEYSTORE_PATH } from "./util";
-import Wallet from "ethereumjs-wallet";
-import secp from "@noble/secp256k1";
 import fs from "fs/promises";
 import path from "path";
+import Wallet from "ethereumjs-wallet";
+import secp from "@noble/secp256k1";
 
 export async function listAccounts(
   folder: string | undefined = KEYSTORE_PATH[process.platform]
@@ -38,13 +38,11 @@ export async function getAccountFrom(
   }
 
   const privKey: Wallet = await Wallet.fromV3(
-    fs
-      .readFile(
-        (await listAccounts(folder)).filter((v) =>
-          v.toLowerCase().includes(uuid?.toLowerCase())
-        )[0]
-      )
-      .toString(),
+    await fs.readFile(
+      (await listAccounts(folder)).find((v) => new RegExp(uuid, "i").test(v)) ??
+        "",
+      "utf8"
+    ),
     passphrase
   );
 
