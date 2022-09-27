@@ -9,12 +9,11 @@ export async function listAccounts(
   folder: string | undefined = KEYSTORE_PATH[process.platform]
 ): Promise<string[]> {
   if (typeof folder === "string" && !fs.stat(folder)) {
-    throw new Error("This path does not exists.");
+    throw new Error("This path does not exists");
   } else if (typeof folder !== "string") {
-    throw new Error("Invalid path value.");
+    throw new Error("Invalid path value");
   }
-  const list = (await fs
-    .readdir(folder))
+  const list = (await fs.readdir(folder))
     .filter((f) =>
       f.match(
         /^UTC--\d{4}-\d\d-\d\dT\d\d-\d\d-\d\dZ--([\da-f]{8}-?(?:[\da-f]{4}-?){3}[\da-f]{12})$/i
@@ -30,10 +29,14 @@ export async function listAccounts(
 }
 
 export async function getAccountFrom(
-  passphrase: string,
   uuid: string,
+  passphrase: string,
   folder?: string
 ): Promise<Account> {
+  if (!/^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i.test(uuid)) {
+    throw new Error("UUID format mismatch");
+  }
+
   const privKey: Wallet = await Wallet.fromV3(
     fs
       .readFile(
@@ -48,7 +51,7 @@ export async function getAccountFrom(
   return {
     VERSION: 0,
     async getPublicKey() {
-      return privKey.getPublicKey().buffer
+      return privKey.getPublicKey().buffer;
     },
     sign(hash) {
       return secp
