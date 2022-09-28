@@ -3,18 +3,24 @@ import {
   KMSClient,
   SignCommand,
   GetPublicKeyCommand,
+  GetPublicKeyCommandOutput,
 } from "@aws-sdk/client-kms";
 import { parseSubjectPublicKeyInfo } from "./parseAsn1";
 
 export function createAccount(client: KMSClient, KeyId: string): Account {
+  let publicKeyPromise: Promise<GetPublicKeyCommandOutput> | null = null;
+
   return {
     VERSION: 0,
     async getPublicKey() {
-      const { PublicKey: publicKey } = await client.send(
-        new GetPublicKeyCommand({
-          KeyId,
-        })
-      );
+      if (!publicKeyPromise)
+        publicKeyPromise = client.send(
+          new GetPublicKeyCommand({
+            KeyId,
+          })
+        );
+
+      const { PublicKey: publicKey } = await publicKeyPromise;
       if (!publicKey) throw new TypeError("Received publicKey is undefined");
       return parseSubjectPublicKeyInfo(publicKey);
     },
