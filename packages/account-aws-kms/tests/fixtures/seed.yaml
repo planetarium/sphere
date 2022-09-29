@@ -1,0 +1,19 @@
+# Configuration for local-kms: https://github.com/nsmithuk/local-kms
+Keys:
+  Asymmetric:
+    Ecc:
+      - Metadata:
+          KeyId: add1894e-86b8-4ffb-aa76-2186b3adc598
+          KeyUsage: SIGN_VERIFY
+          Description: ECC key with curve secp256k1
+        # Generated from OpenSSL 1.1.1q (5 Jul 2022):
+        # openssl ecparam -name secp256k1 -genkey -noout
+        PrivateKeyPem: |
+          -----BEGIN EC PRIVATE KEY-----
+          MHQCAQEEIMrH4Kc+yMQJiCJPgdh88OOtoor5xjde+r5wvEOTF7hcoAcGBSuBBAAK
+          oUQDQgAEoDplzjzLsveHz3fi3pyFeFuAplwp0xur53jB5bjoM6ikZlguiC5YlY0P
+          ZmUH0DQ0oROuXDYMCVCA9poEFY+RPQ==
+          -----END EC PRIVATE KEY-----
+Aliases:
+  - AliasName: alias/test-alias
+    TargetKeyId: add1894e-86b8-4ffb-aa76-2186b3adc598
