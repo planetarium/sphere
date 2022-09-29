@@ -1,5 +1,5 @@
 import { Account } from "../sign";
-import { KEYSTORE_PATH } from "./util";
+import { KEYSTORE_PATH, UTC_FILE_PATTERN } from "./util";
 import fs from "fs/promises";
 import path from "path";
 import Wallet from "ethereumjs-wallet";
@@ -11,11 +11,7 @@ export async function listAccounts(
   if (typeof folder !== "string") throw new Error("Invalid path value");
   if (!fs.stat(folder)) throw new Error("This path does not exist");
   const list = (await fs.readdir(folder))
-    .filter((f) =>
-      f.match(
-        /^UTC--\d{4}-\d\d-\d\dT\d\d-\d\d-\d\dZ--([\da-f]{8}-?(?:[\da-f]{4}-?){3}[\da-f]{12})$/i
-      )
-    )
+    .filter((f) => f.match(UTC_FILE_PATTERN))
     .map((file) => {
       return path.resolve(folder, file);
     });
