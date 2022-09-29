@@ -8,11 +8,8 @@ import secp from "@noble/secp256k1";
 export async function listAccounts(
   folder: string | undefined = KEYSTORE_PATH[process.platform]
 ): Promise<string[]> {
-  if (typeof folder === "string" && !fs.stat(folder)) {
-    throw new Error("This path does not exists");
-  } else if (typeof folder !== "string") {
-    throw new Error("Invalid path value");
-  }
+  if (typeof folder !== "string") throw new Error("Invalid path value");
+  if (!fs.stat(folder)) throw new Error("This path does not exist");
   const list = (await fs.readdir(folder))
     .filter((f) =>
       f.match(
