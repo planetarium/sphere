@@ -20,9 +20,10 @@ export function createAccount(client: KMSClient, KeyId: string): Account {
           })
         );
 
-      const { PublicKey: publicKey } = await publicKeyPromise;
-      if (!publicKey) throw new TypeError("Received publicKey is undefined");
-      return parseSubjectPublicKeyInfo(publicKey);
+      const { PublicKey } = await publicKeyPromise;
+      if (!PublicKey) throw new TypeError("Received publicKey is undefined");
+      // https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm
+      return parseSubjectPublicKeyInfo(PublicKey).slice(0, 34).fill(0x03, 1, 2);
     },
     async sign(hash) {
       const { Signature: signature } = await client.send(
