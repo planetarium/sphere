@@ -32,13 +32,13 @@ export function createAccount(client: KMSClient, KeyId: string): Account {
       const { Signature: signature } = await client.send(
         new SignCommand({
           KeyId,
-          Message: new Uint8Array(hash),
+          Message: hash,
           MessageType: "DIGEST",
           SigningAlgorithm: "ECDSA_SHA_256",
         })
       );
       if (!signature) throw new TypeError("Received signature is undefined");
-      return signature.buffer;
+      return signature;
     },
   };
 }

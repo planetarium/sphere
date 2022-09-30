@@ -12,9 +12,7 @@ export function createAccount(privateKey?: string | Uint8Array): Account {
       return Promise.resolve(secp.getPublicKey(privKey, isCompressed));
     },
     sign(hash) {
-      return secp
-        .sign(new Uint8Array(hash), privKey)
-        .then((array) => array.buffer);
+      return secp.sign(hash, privKey);
     },
   };
 }
