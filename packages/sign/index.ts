@@ -18,7 +18,7 @@ export interface Account {
    */
   readonly VERSION: number;
 
-  getPublicKey(): Promise<ArrayBuffer>;
+  getPublicKey(isCompressed?: boolean): Promise<ArrayBuffer>;
   /**
    * Sign a given bytes. The function must return a valid ECDSA signature.
    *
