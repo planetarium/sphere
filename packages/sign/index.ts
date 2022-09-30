@@ -18,13 +18,13 @@ export interface Account {
    */
   readonly VERSION: number;
 
-  getPublicKey(isCompressed?: boolean): Promise<ArrayBuffer>;
+  getPublicKey(isCompressed?: boolean): Promise<Uint8Array>;
   /**
    * Sign a given bytes. The function must return a valid ECDSA signature.
    *
    * @param data A payload to sign.
    */
-  sign(hash: ArrayBuffer): Promise<ArrayBuffer>;
+  sign(hash: Uint8Array): Promise<Uint8Array>;
 }
 
 export const ACCOUNT_VERSION = 0;
@@ -40,7 +40,7 @@ export async function signTransaction(
   const decodedTx: BencodexDict = decode(new Buffer(txBinary));
 
   const hash = await crypto.subtle.digest("SHA-256", txBinary);
-  const signature = await account.sign(hash);
+  const signature = await account.sign(new Uint8Array(hash));
 
   decodedTx.set(new Buffer([0x53]), signature);
 
