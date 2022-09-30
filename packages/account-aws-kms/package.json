@@ -22,5 +22,8 @@
   },
   "peerDependencies": {
     "@aws-sdk/client-kms": "*"
+  },
+  "volta": {
+    "node": "18.10.0"
   }
 }
