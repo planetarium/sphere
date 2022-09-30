@@ -1,13 +1,8 @@
 import { toChecksum } from "./util";
-import { Sequence, Integer } from "asn1js";
 import { encode, decode, BencodexDict } from "bencodex";
 import { keccak_256 } from "@noble/hashes/sha3";
 import { bytesToHex, hexToBytes } from "@noble/hashes/utils";
-
-export interface Signature {
-  r: bigint;
-  s: bigint;
-}
+import { Buffer } from "buffer/";
 
 /**
  * Account is a implementation to perform cryptographic signing and verifying them.
@@ -29,7 +24,7 @@ export interface Account {
    *
    * @param data A payload to sign.
    */
-  sign(hash: ArrayBuffer): Promise<Signature | ArrayBuffer>;
+  sign(hash: ArrayBuffer): Promise<ArrayBuffer>;
 }
 
 export const ACCOUNT_VERSION = 0;
@@ -42,22 +37,12 @@ export async function signTransaction(
     throw new Error("The Account interface version doesn't match.");
 
   const txBinary = hexToBytes(tx);
-  const decodedTx: BencodexDict = decode(txBinary);
+  const decodedTx: BencodexDict = decode(new Buffer(txBinary));
 
   const hash = await crypto.subtle.digest("SHA-256", txBinary);
   const signature = await account.sign(hash);
 
-  const encodedSignature =
-    "r" in signature
-      ? new Sequence({
-          value: [
-            Integer.fromBigInt(signature.r),
-            Integer.fromBigInt(signature.s),
-          ],
-        }).toBER(false)
-      : signature;
-
-  decodedTx.set(new Uint8Array([0x53]).buffer, encodedSignature);
+  decodedTx.set(new Buffer([0x53]), signature);
 
   return encode(decodedTx)?.toString("hex");
 }
