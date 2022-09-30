@@ -8,11 +8,14 @@
   "types": "dist/index.d.ts",
   "dependencies": {
     "@noble/secp256k1": "^1.7.0",
-    "@planetarium/sign": "workspace:^",
     "ethereumjs-wallet": "^1.0.2"
   },
   "devDependencies": {
+    "@planetarium/sign": "workspace:^",
     "nanobundle": "^0.0.28"
+  },
+  "peerDependencies": {
+    "@planetarium/sign": "workspace:^"
   },
   "scripts": {
     "build": "nanobundle build"
