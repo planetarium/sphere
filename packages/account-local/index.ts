@@ -41,13 +41,12 @@ export async function getAccountFrom(
 
   return {
     VERSION: 0,
-    async getPublicKey() {
-      return privKey.getPublicKey().buffer;
+    async getPublicKey(isCompressed: boolean = false) {
+      return privKey.getPublicKey();
     },
-    sign(hash) {
+    async sign(hash: Uint8Array) {
       return secp
         .sign(new Uint8Array(hash), privKey.getPrivateKeyString())
-        .then((array) => array.buffer);
     },
   };
 }
