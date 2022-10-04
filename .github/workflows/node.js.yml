@@ -8,15 +8,34 @@ on:
     branches: []
     tags: ["*"]
 
+
 jobs:
+  directories:
+    runs-on: ubuntu-latest
+    outputs:
+      dir: ${{ steps.dir.outputs.dir }}
+    steps:
+      - uses: actions/checkout@v3
+      - id: dir
+        run: echo "::set-output name=dir::$(ls -d packages/*/ | jq --raw-input --slurp --compact-output 'split("\n")[:-1]')"
+
+
   build:
     runs-on: ubuntu-latest
-
+    needs: [directories]
+    strategy:
+      matrix:
+        dir: ${{fromJson(needs.directories.outputs.dir)}}
     steps:
     - uses: actions/checkout@v3
     - uses: actions/setup-node@v3
       with:
         node-version: 18
         cache: 'yarn'
+    - run: echo ${{ matrix.dir }}
+    - run: yarn
+    - run: ls -la .
+    - run: cd ${{ matrix.dir }}
+    - run: yarn
     - run: yarn build
     - run: yarn test
