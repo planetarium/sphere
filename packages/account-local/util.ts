@@ -2,7 +2,7 @@ import { homedir } from "os";
 import path from "path";
 
 export const UTC_FILE_PATTERN = new RegExp(
-  /^UTC--\d{4}-\d\d-\d\dT\d\d-\d\d-\d\dZ--([\da-f]{8}-?(?:[\da-f]{4}-?){3}[\da-f]{12})$/i
+  /UTC--\d{4}-\d\d-\d\dT\d\d-\d\d-\d\dZ--([\da-f]{8}-?(?:[\da-f]{4}-?){3}[\da-f]{12})/i
 );
 
 const WIN_KEYSTORE_PATH = path.join(
