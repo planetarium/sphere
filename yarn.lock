@@ -931,7 +931,7 @@ __metadata:
   dependencies:
     "@aws-sdk/client-kms": ^3.178.0
     "@planetarium/sign": "workspace:^"
-    asn1js: "npm:^3.0.5"
+    asn1js: ^3.0.5
     nanobundle: ^0.0.28
   peerDependencies:
     "@aws-sdk/client-kms": "*"
