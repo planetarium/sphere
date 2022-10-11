@@ -204,7 +204,7 @@ __metadata:
   resolution: "@planetarium/sign@workspace:packages/sign"
   dependencies:
     "@noble/hashes": ^1.1.2
-    bencodex: ^0.1.1
+    bencodex: ^0.1.2
     buffer: ^6.0.3
     nanobundle: ^0.0.28
   languageName: unknown
@@ -549,17 +549,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"asn1js@npm:^3.0.5":
-  version: 3.0.5
-  resolution: "asn1js@npm:3.0.5"
-  dependencies:
-    pvtsutils: ^1.3.2
-    pvutils: ^1.1.3
-    tslib: ^2.4.0
-  checksum: 3b6af1bbadd5762ef8ead5daf2f6bda1bc9e23bc825c4dcc996aa1f9521ad7390a64028565d95d98090d69c8431f004c71cccb866004759169d7c203cf9075eb
-  languageName: node
-  linkType: hard
-
 "assertion-error@npm:^1.1.0":
   version: 1.1.0
   resolution: "assertion-error@npm:1.1.0"
@@ -590,10 +579,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bencodex@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "bencodex@npm:0.1.1"
-  checksum: b01bca6c02336e5e2efc888250d8950f5ad36ad9227889ace90c1bfe04bf7fbe1662cdcb600921bcf7a144f2540aa63e15f316df46a64804c23cf28ce4b7fb16
+"bencodex@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "bencodex@npm:0.1.2"
+  checksum: 0e6a7b34d039ccb18219ccbcf7a9a5473eca0a2deb38aadc923d219e19aacb301af0cf0c7350b04b38b7f498f23639b55c9a45a95253a77afbe2a86419ae6e51
   languageName: node
   linkType: hard
 
@@ -2925,22 +2914,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"pvtsutils@npm:^1.3.2":
-  version: 1.3.2
-  resolution: "pvtsutils@npm:1.3.2"
-  dependencies:
-    tslib: ^2.4.0
-  checksum: 9b8155611363e2f40276879f2454e60204b45be0cd0482f9373f369308a2e9c76d5d74cdf661a3f5aae8022d75ea159eb0ba38ee78fc782ee3051e4722db98d0
-  languageName: node
-  linkType: hard
-
-"pvutils@npm:^1.1.3":
-  version: 1.1.3
-  resolution: "pvutils@npm:1.1.3"
-  checksum: 2ee26a9e5176c348977d6ec00d8ee80bff62f51743b1c5fe8abeeb4c5d29d9959cdfe0ce146707a9e6801bce88190fed3002d720b072dc87d031c692820b44c9
-  languageName: node
-  linkType: hard
-
 "queue-microtask@npm:^1.2.2":
   version: 1.2.3
   resolution: "queue-microtask@npm:1.2.3"
@@ -3472,13 +3445,6 @@ __metadata:
   version: 1.14.1
   resolution: "tslib@npm:1.14.1"
   checksum: dbe628ef87f66691d5d2959b3e41b9ca0045c3ee3c7c7b906cc1e328b39f199bb1ad9e671c39025bd56122ac57dfbf7385a94843b1cc07c60a4db74795829acd
-  languageName: node
-  linkType: hard
-
-"tslib@npm:^2.4.0":
-  version: 2.4.0
-  resolution: "tslib@npm:2.4.0"
-  checksum: 8c4aa6a3c5a754bf76aefc38026134180c053b7bd2f81338cb5e5ebf96fefa0f417bff221592bf801077f5bf990562f6264fecbc42cd3309b33872cb6fc3b113
   languageName: node
   linkType: hard
 
