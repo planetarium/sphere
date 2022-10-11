@@ -6,6 +6,9 @@
   "module": "dist/index.mjs",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
   "dependencies": {
     "@noble/hashes": "^1.1.2",
     "bencodex": "^0.1.2",
