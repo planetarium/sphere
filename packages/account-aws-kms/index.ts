@@ -12,7 +12,7 @@ export function createAccount(client: KMSClient, KeyId: string): Account {
 
   return {
     VERSION: 0,
-    async getPublicKey() {
+    async getPublicKey(isCompressed) {
       if (!publicKeyPromise)
         publicKeyPromise = client.send(
           new GetPublicKeyCommand({
@@ -22,20 +22,23 @@ export function createAccount(client: KMSClient, KeyId: string): Account {
 
       const { PublicKey } = await publicKeyPromise;
       if (!PublicKey) throw new TypeError("Received publicKey is undefined");
+
+      let publicKey = parseSubjectPublicKeyInfo(PublicKey);
       // https://en.bitcoin.it/wiki/Elliptic_Curve_Digital_Signature_Algorithm
-      return parseSubjectPublicKeyInfo(PublicKey).slice(0, 34).fill(0x03, 1, 2);
+      if (isCompressed) publicKey = publicKey.slice(0, 34).fill(0x03, 1, 2);
+      return publicKey;
     },
     async sign(hash) {
       const { Signature: signature } = await client.send(
         new SignCommand({
           KeyId,
-          Message: new Uint8Array(hash),
+          Message: hash,
           MessageType: "DIGEST",
           SigningAlgorithm: "ECDSA_SHA_256",
         })
       );
       if (!signature) throw new TypeError("Received signature is undefined");
-      return signature.buffer;
+      return signature;
     },
   };
 }
