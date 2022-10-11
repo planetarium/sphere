@@ -8,7 +8,7 @@
   "types": "dist/index.d.ts",
   "dependencies": {
     "@noble/hashes": "^1.1.2",
-    "bencodex": "^0.1.1",
+    "bencodex": "^0.1.2",
     "buffer": "^6.0.3"
   },
   "devDependencies": {

@@ -1,6 +1,12 @@
 import { expect, test } from "vitest";
-import { deriveAddress } from "@planetarium/sign";
+import { deriveAddress, signTransaction } from "@planetarium/sign";
 import { createAccount } from "..";
+
+if (globalThis.crypto == null) {
+  // FIXME: This is a workaround for the lack of Web Crypto API in Vitest.
+  // @ts-ignore
+  globalThis.crypto = require("node:crypto").webcrypto;
+}
 
 test("address matches", async () => {
   const samples: [string, string][] = [
@@ -20,4 +26,16 @@ test("address matches", async () => {
   for (const [privateKey, address] of samples) {
     expect(await deriveAddress(createAccount(privateKey))).eq(address);
   }
+});
+
+test("signed transaction matches", async () => {
+  const privateKey =
+    "ffab1d7ae8381a6a3cbdb19a4c10356c07e6d56c84c107191a4ae4e4402f4637";
+  const account = createAccount(privateKey);
+  const tx =
+    "64313a616c6475373a747970655f696475363a7374616b653275363a76616c7565736475323a616d69316575323a696431363ad4e5b86e9ab2564e8c91bc29b9142a7b656565313a6733323a4582250d0da33b06779a8475d283d5dd210c683b9b999d74d03fac4f58fa6bce313a6e693065313a7036353a04dc7c4c265c176d45e29aa99c95687d25067069cd782021a543e574f3c4869c9b2dcead228aa2f0fbd9108c6deaae02982cf29a2040bd8a9859601d863c2e8be1313a7332303a8f9ae9d0c1559c09809edfa94add154693933185313a747532373a323032322d31302d31315430373a31323a30362e3636393439315a313a756c32303a684560381e0ee53074dff57ff31f2f1c07a082ab32303a8f9ae9d0c1559c09809edfa94add1546939331856565";
+  const signedTx =
+    "64313a5337303a304402202222522d382bc276706eead08138db3686e4f53dc3de7f49696f63233f3a54c5022015f009eb731bcd57a908bbe06fded19d718824ffe179341b016ea1c46102abaf313a616c6475373a747970655f696475363a7374616b653275363a76616c7565736475323a616d69316575323a696431363ad4e5b86e9ab2564e8c91bc29b9142a7b656565313a6733323a4582250d0da33b06779a8475d283d5dd210c683b9b999d74d03fac4f58fa6bce313a6e693065313a7036353a04dc7c4c265c176d45e29aa99c95687d25067069cd782021a543e574f3c4869c9b2dcead228aa2f0fbd9108c6deaae02982cf29a2040bd8a9859601d863c2e8be1313a7332303a8f9ae9d0c1559c09809edfa94add154693933185313a747532373a323032322d31302d31315430373a31323a30362e3636393439315a313a756c32303a684560381e0ee53074dff57ff31f2f1c07a082ab32303a8f9ae9d0c1559c09809edfa94add1546939331856565";
+
+  expect(await signTransaction(tx, account)).toEqual(signedTx);
 });

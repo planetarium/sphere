@@ -972,7 +972,7 @@ __metadata:
   resolution: "@planetarium/sign@workspace:packages/sign"
   dependencies:
     "@noble/hashes": ^1.1.2
-    bencodex: ^0.1.1
+    bencodex: ^0.1.2
     buffer: ^6.0.3
     nanobundle: ^0.0.28
   languageName: unknown
@@ -1358,10 +1358,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bencodex@npm:^0.1.1":
-  version: 0.1.1
-  resolution: "bencodex@npm:0.1.1"
-  checksum: b01bca6c02336e5e2efc888250d8950f5ad36ad9227889ace90c1bfe04bf7fbe1662cdcb600921bcf7a144f2540aa63e15f316df46a64804c23cf28ce4b7fb16
+"bencodex@npm:^0.1.2":
+  version: 0.1.2
+  resolution: "bencodex@npm:0.1.2"
+  checksum: 0e6a7b34d039ccb18219ccbcf7a9a5473eca0a2deb38aadc923d219e19aacb301af0cf0c7350b04b38b7f498f23639b55c9a45a95253a77afbe2a86419ae6e51
   languageName: node
   linkType: hard
 
