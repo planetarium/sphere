@@ -1,0 +1,29 @@
+{
+  "name": "@planetarium/account-aws-kms",
+  "version": "0.0.0",
+  "license": "LGPL",
+  "source": "index.ts",
+  "main": "index.ts",
+  "publishConfig": {
+    "module": "dist/index.mjs",
+    "main": "dist/index.cjs"
+  },
+  "types": "dist/index.d.ts",
+  "dependencies": {
+    "@planetarium/sign": "workspace:^",
+    "asn1js": "npm:^3.0.5"
+  },
+  "devDependencies": {
+    "@aws-sdk/client-kms": "^3.178.0",
+    "nanobundle": "^0.0.28"
+  },
+  "scripts": {
+    "build": "nanobundle build"
+  },
+  "peerDependencies": {
+    "@aws-sdk/client-kms": "*"
+  },
+  "volta": {
+    "node": "18.10.0"
+  }
+}
