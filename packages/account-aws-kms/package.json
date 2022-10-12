@@ -1,6 +1,6 @@
 {
   "name": "@planetarium/account-aws-kms",
-  "version": "0.0.0",
+  "version": "0.0.1",
   "license": "LGPL",
   "source": "index.ts",
   "main": "index.ts",
