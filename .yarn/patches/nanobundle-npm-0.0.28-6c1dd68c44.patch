@@ -1,0 +1,28 @@
+diff --git a/bin.mjs b/bin.mjs
+index 57bd96f6f8dff4f700b12a5a40572ea38f09b46d..929c72a9b9ae459cb0829ad6aac4567703641427 100644
+--- a/bin.mjs
++++ b/bin.mjs
+@@ -279,8 +279,12 @@ Or you may not need to specify "require" or "node" entries.
+   }
+   function addNodeEntry(key, output) {
+     const ext = path.extname(output);
+-    if (ext === ".js" || ext === ".cjs" || ext === ".node") {
+-      addEntry(key, output, "node", "commonjs");
++    if (ext === ".js") {
++      addEntry(key, output, "node", defaultModule);
++    } else if (ext === ".cjs" || ext === ".node") {
++      addEntry(key, output, "node", "commonjs")
++    } else if (ext === ".mjs") {
++      addEntry(key, output, "node", "esmodule");
+     }
+   }
+   if (config.main) {
+@@ -299,6 +303,8 @@ Or you may not need to specify "require" or "node" entries.
+             addModuleEntry(`exports["${key}"]`, output);
+           } else if (key === "require") {
+             addNodeEntry(`exports["${key}"]`, output);
++          } else if (key === "node") {
++            addNodeEntry(`exports["${key}"]`, output);
+           } else {
+             addMainEntry(`exports["${key}"]`, output);
+           }
