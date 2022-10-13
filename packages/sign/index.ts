@@ -2,7 +2,7 @@ import { toChecksum } from "./util";
 import { encode, decode, BencodexDict } from "bencodex";
 import { keccak_256 } from "@noble/hashes/sha3";
 import { bytesToHex, hexToBytes } from "@noble/hashes/utils";
-import { Buffer } from "buffer/";
+import { Buffer } from "#buffer";
 import * as crypto from "#webcrypto";
 
 /**

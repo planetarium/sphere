@@ -14,6 +14,10 @@
     "#webcrypto": {
       "node": "node:crypto",
       "default": "./webcrypto.ts"
+    },
+    "#buffer": {
+      "node": "node:buffer",
+      "default": "buffer/"
     }
   },
   "exports": {
