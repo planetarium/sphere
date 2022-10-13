@@ -3,6 +3,7 @@ import { encode, decode, BencodexDict } from "bencodex";
 import { keccak_256 } from "@noble/hashes/sha3";
 import { bytesToHex, hexToBytes } from "@noble/hashes/utils";
 import { Buffer } from "buffer/";
+import * as crypto from "#webcrypto";
 
 /**
  * Account is a implementation to perform cryptographic signing and verifying them.
