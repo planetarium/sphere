@@ -3,7 +3,7 @@
   "version": "0.0.2",
   "type": "module",
   "license": "LGPL",
-  "source": "index.ts",
+  "source": "src/index.ts",
   "module": "dist/index.esm.js",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
@@ -12,8 +12,8 @@
   ],
   "imports": {
     "#webcrypto": {
-      "node": "node:crypto",
-      "default": "./webcrypto.ts"
+      "node": "./src/webcrypto/node.ts",
+      "default": "./src/webcrypto/browser.ts"
     },
     "#buffer": {
       "node": "node:buffer",
@@ -32,6 +32,7 @@
     "buffer": "^6.0.3"
   },
   "devDependencies": {
+    "@types/node": "^18.11.0",
     "nanobundle": "^0.0.28"
   },
   "scripts": {
