@@ -972,6 +972,7 @@ __metadata:
   resolution: "@planetarium/sign@workspace:packages/sign"
   dependencies:
     "@noble/hashes": ^1.1.2
+    "@types/node": ^18.11.0
     bencodex: ^0.1.2
     buffer: ^6.0.3
     nanobundle: ^0.0.28
@@ -1028,6 +1029,13 @@ __metadata:
   version: 18.7.21
   resolution: "@types/node@npm:18.7.21"
   checksum: 9e0558dd44766fb3b1b26815e9877849d8f1188115e0d2bee540cee2c5a11f90e4c00ee059edae8ea018e7f66217e4bf53271536c9a6fd05e33f713b8daa4c66
+  languageName: node
+  linkType: hard
+
+"@types/node@npm:^18.11.0":
+  version: 18.11.0
+  resolution: "@types/node@npm:18.11.0"
+  checksum: f27f899ab428e5732f04fadadc9203f44bdf3abf56474540ee27da90e4f2ba133faf87263cada4d2271955f92ee6a142bd50683c86290fe5070c19aac44fd654
   languageName: node
   linkType: hard
 
@@ -3393,7 +3401,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"nanobundle@npm:^0.0.28":
+"nanobundle@npm:0.0.28":
   version: 0.0.28
   resolution: "nanobundle@npm:0.0.28"
   dependencies:
@@ -3410,6 +3418,26 @@ __metadata:
   bin:
     nanobundle: bin.mjs
   checksum: 800f08e8b5672c06193c24d36e469f79157a8e1aed8f59a4a6cc567fb5de465a1ffe6d11f7ff836cf0debec1b8dc042dc7c15e5cba486b279436a08525ce863f
+  languageName: node
+  linkType: hard
+
+"nanobundle@patch:nanobundle@npm%3A0.0.28#./.yarn/patches/nanobundle-npm-0.0.28-6c1dd68c44.patch::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 0.0.28
+  resolution: "nanobundle@patch:nanobundle@npm%3A0.0.28#./.yarn/patches/nanobundle-npm-0.0.28-6c1dd68c44.patch::version=0.0.28&hash=c17101&locator=root-workspace-0b6124%40workspace%3A."
+  dependencies:
+    browserslist: ^4.19.3
+    esbuild: ^0.14.23
+    meow: ^10.1.2
+    pretty-bytes: ^6.0.0
+    tsconfck: ^1.2.0
+  peerDependencies:
+    typescript: ^3.7.0 || ^4.0.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  bin:
+    nanobundle: bin.mjs
+  checksum: 9d7098478bbe98d30d25a6b2013713c388f107ca2e9c68c0da0a87c53f30347fe6b4e3452b59a41697a297cdb2a877c5c88557b4a153eb02385c41994b31fafa
   languageName: node
   linkType: hard
 

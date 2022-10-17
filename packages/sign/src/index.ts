@@ -2,7 +2,8 @@ import { toChecksum } from "./util";
 import { encode, decode, BencodexDict } from "bencodex";
 import { keccak_256 } from "@noble/hashes/sha3";
 import { bytesToHex, hexToBytes } from "@noble/hashes/utils";
-import { Buffer } from "buffer/";
+import { Buffer } from "#buffer";
+import * as crypto from "#webcrypto";
 
 /**
  * Account is a implementation to perform cryptographic signing and verifying them.
@@ -42,7 +43,14 @@ export async function signTransaction(
   const hash = await crypto.subtle.digest("SHA-256", txBinary);
   const signature = await account.sign(new Uint8Array(hash));
 
-  decodedTx.set(new Buffer([0x53]), signature);
+  if (
+    Array.from(decodedTx.entries()).some(
+      ([key]: [Buffer, unknown]) => key[0] === 0x53
+    )
+  )
+    throw new Error("Already signed.");
+
+  decodedTx.set(new Uint8Array([0x53]), signature.buffer);
 
   return encode(decodedTx)?.toString("hex");
 }
@@ -50,9 +58,6 @@ export async function signTransaction(
 export async function deriveAddress(account: Account) {
   const publicKey = await account.getPublicKey();
   return (
-    "0x" +
-    toChecksum(
-      bytesToHex(keccak_256(new Uint8Array(publicKey).slice(1))).slice(-40)
-    )
+    "0x" + toChecksum(bytesToHex(keccak_256(publicKey.slice(1))).slice(-40))
   );
 }

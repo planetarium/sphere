@@ -16,5 +16,8 @@
     "nanobundle": "^0.0.28",
     "prettier": "^2.7.1",
     "typescript": "^4.8.3"
+  },
+  "resolutions": {
+    "nanobundle@^0.0.28": "patch:nanobundle@npm%3A0.0.28#./.yarn/patches/nanobundle-npm-0.0.28-6c1dd68c44.patch"
   }
 }

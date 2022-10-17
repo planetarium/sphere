@@ -1,20 +1,38 @@
 {
   "name": "@planetarium/sign",
-  "version": "0.0.0",
+  "version": "0.0.2",
+  "type": "module",
   "license": "LGPL",
-  "source": "index.ts",
-  "module": "dist/index.mjs",
+  "source": "src/index.ts",
+  "module": "dist/index.esm.js",
   "main": "dist/index.cjs",
   "types": "dist/index.d.ts",
   "files": [
     "dist/**/*"
   ],
+  "imports": {
+    "#webcrypto": {
+      "node": "./src/webcrypto/node.ts",
+      "default": "./src/webcrypto/browser.ts"
+    },
+    "#buffer": {
+      "node": "node:buffer",
+      "default": "buffer/"
+    }
+  },
+  "exports": {
+    "node": "./dist/index.mjs",
+    "import": "./dist/index.esm.js",
+    "require": "./dist/index.cjs",
+    "types": "./dist/index.d.ts"
+  },
   "dependencies": {
     "@noble/hashes": "^1.1.2",
     "bencodex": "^0.1.2",
     "buffer": "^6.0.3"
   },
   "devDependencies": {
+    "@types/node": "^18.11.0",
     "nanobundle": "^0.0.28"
   },
   "scripts": {
