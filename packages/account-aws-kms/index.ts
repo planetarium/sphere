@@ -6,7 +6,7 @@ import {
   GetPublicKeyCommandOutput,
 } from "@aws-sdk/client-kms";
 import { parseSubjectPublicKeyInfo } from "./parseAsn1";
-import { secp256K1ScalarIsHigh, secp256K1ScalarNegate} from "./normalizeSignature";
+import { Signature } from "@noble/secp256k1";
 
 export function createAccount(client: KMSClient, KeyId: string): Account {
   let publicKeyPromise: Promise<GetPublicKeyCommandOutput> | null = null;
@@ -39,10 +39,8 @@ export function createAccount(client: KMSClient, KeyId: string): Account {
         })
       );
       if (!signature) throw new TypeError("Received signature is undefined");
-      if (secp256K1ScalarIsHigh(signature)){
-        return secp256K1ScalarNegate(signature);
-      }
-      return signature;
+
+      return Signature.fromDER(signature).normalizeS().toDERRawBytes(false);
     },
   };
 }

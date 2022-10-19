@@ -13,6 +13,7 @@
   },
   "types": "dist/index.d.ts",
   "dependencies": {
+    "@noble/secp256k1": "^1.7.0",
     "@planetarium/sign": "workspace:^",
     "asn1js": "^3.0.5"
   },
