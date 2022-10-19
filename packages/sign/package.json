@@ -21,9 +21,9 @@
     }
   },
   "exports": {
+    "require": "./dist/index.cjs",
     "node": "./dist/index.mjs",
     "import": "./dist/index.esm.js",
-    "require": "./dist/index.cjs",
     "types": "./dist/index.d.ts"
   },
   "dependencies": {
