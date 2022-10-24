@@ -4,7 +4,7 @@ import * as secp from "@noble/secp256k1";
 /**
  * account-raw
  * 
- * get raw private key as input to create account.
+ * Gets raw private key as input to create account.
  * if input private key is null, it randomly generates private key.
  */
 

@@ -8,7 +8,7 @@ import secp from "@noble/secp256k1";
 /**
  * account-local
  * 
- * gets Web3 Secret Storage formatted keyfile as key source and creates account.
+ * Gets Web3 Secret Storage formatted keyfile as key source and creates account.
  * https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition
  * 
  * Default filepath of "listAccounts" is planetarium's usual keystore path,
