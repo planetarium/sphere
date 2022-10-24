@@ -11,10 +11,8 @@ export async function listAccounts(
   if (typeof folder !== "string") throw new Error("Invalid path value");
   if (!fs.stat(folder)) throw new Error("This path does not exist");
   const list = (await fs.readdir(folder))
-    .filter((f) => f.match(UTC_FILE_PATTERN))
-    .map((file) => {
-      return path.resolve(folder, file);
-    });
+    .map((f) => f.match(UTC_FILE_PATTERN)?.[1])
+    .filter((v): v is string => !!v);
   if (list.length <= 0) {
     throw new Error("No keys found in folder");
   }
@@ -32,7 +30,7 @@ export async function getAccountFrom(
 
   const privKey: Wallet = await Wallet.fromV3(
     await fs.readFile(
-      (await listAccounts(folder)).find((v) => new RegExp(uuid, "i").test(v)) ??
+      (await listAccounts(folder)).find((v) => v === uuid) ??
         "",
       "utf8"
     ),
