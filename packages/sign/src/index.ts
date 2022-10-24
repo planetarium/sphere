@@ -21,8 +21,9 @@ export interface Account {
 
   getPublicKey(isCompressed?: boolean): Promise<Uint8Array>;
   /**
-   * Sign a given bytes. The function must return a valid ECDSA signature.
-   *
+   * Sign a given bytes. The function must return a valid ECDSA signature using
+   * 'SECP256K1' curve.
+   * 
    * @param data A payload to sign.
    */
   sign(hash: Uint8Array): Promise<Uint8Array>;
