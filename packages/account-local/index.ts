@@ -30,8 +30,7 @@ export async function getAccountFrom(
 
   const privKey: Wallet = await Wallet.fromV3(
     await fs.readFile(
-      (await listAccounts(folder)).find((v) => v === uuid) ??
-        "",
+      (await listAccounts(folder)).find((v) => v === uuid) ?? "",
       "utf8"
     ),
     passphrase
@@ -40,12 +39,10 @@ export async function getAccountFrom(
   return {
     VERSION: 0,
     async getPublicKey() {
-      return privKey.getPublicKey().buffer;
+      return privKey.getPublicKey();
     },
     sign(hash) {
-      return secp
-        .sign(new Uint8Array(hash), privKey.getPrivateKeyString())
-        .then((array) => array.buffer);
+      return secp.sign(hash, privKey.getPrivateKeyString());
     },
   };
 }
