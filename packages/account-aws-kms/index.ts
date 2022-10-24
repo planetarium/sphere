@@ -8,6 +8,16 @@ import {
 import { parseSubjectPublicKeyInfo } from "./parseAsn1";
 import { Signature } from "@noble/secp256k1";
 
+/**
+ * account-aws-kms
+ * 
+ * Using KMSClient instance and KeyID as delegate of account,
+ * remotely sending request parse public key and signing digest.
+ * 
+ * NOTE: "ECC_SECG_P256K1" and "SECP256K1" are basically same curve. 
+ *       Don't get confused.
+ */
+
 export function createAccount(client: KMSClient, KeyId: string): Account {
   let publicKeyPromise: Promise<GetPublicKeyCommandOutput> | null = null;
 
