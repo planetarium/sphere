@@ -31,6 +31,12 @@ export interface Account {
 
 export const ACCOUNT_VERSION = 0;
 
+export async function getEncodedPublicKey(
+  account: Account
+): Promise<string> {
+  return Buffer.from(await account.getPublicKey(true)).toString("hex");
+}
+
 export async function signTransaction(
   tx: string,
   account: Account
