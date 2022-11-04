@@ -23,7 +23,7 @@ export interface Account {
   /**
    * Sign a given bytes. The function must return a valid ECDSA signature using
    * 'SECP256K1' curve.
-   * 
+   *
    * @param data A payload to sign.
    */
   sign(hash: Uint8Array): Promise<Uint8Array>;
@@ -61,4 +61,8 @@ export async function deriveAddress(account: Account) {
   return (
     "0x" + toChecksum(bytesToHex(keccak_256(publicKey.slice(1))).slice(-40))
   );
+}
+
+export async function getEncodedPublicKey(account: Account){
+  return bytesToHex(await account.getPublicKey());
 }
