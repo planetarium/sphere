@@ -3,7 +3,7 @@ import { UTC_FILE_PATTERN, sanitizeKeypath } from "./util";
 import fs from "fs/promises";
 import path from "path";
 import Wallet from "ethereumjs-wallet";
-import secp from "@noble/secp256k1";
+import * as secp from "@noble/secp256k1";
 
 /**
  * account-local
@@ -48,8 +48,10 @@ export async function getAccountFrom(
 
   return {
     VERSION: 0,
-    async getPublicKey() {
-      return privKey.getPublicKey();
+    getPublicKey(isCompressed: boolean = true) {
+      const publicKey = new Uint8Array(privKey.getPublicKey());
+      if(isCompressed) return secp.utils.concatBytes(new Uint8Array([0x03]), publicKey.slice(0,32))
+      return secp.utils.concatBytes(new Uint8Array([0x04]), publicKey)
     },
     sign(hash) {
       return secp.sign(hash, privKey.getPrivateKeyString());
