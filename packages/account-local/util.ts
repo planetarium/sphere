@@ -1,4 +1,5 @@
 import { homedir } from "os";
+import fs from "fs/promises";
 import path from "path";
 
 export const UTC_FILE_PATTERN =
@@ -27,7 +28,7 @@ const LINUX_KEYSTORE_PATH = path.join(
   "keystore"
 );
 
-export const KEYSTORE_PATH: {
+const KEYSTORE_PATH: {
   [k in NodeJS.Platform]: string | undefined;
 } = {
   aix: undefined,
@@ -42,3 +43,9 @@ export const KEYSTORE_PATH: {
   netbsd: LINUX_KEYSTORE_PATH,
   haiku: undefined,
 };
+
+export async function sanitizeKeypath(folder: string | undefined = KEYSTORE_PATH[process.platform]){
+  if (typeof folder !== "string") throw new Error("Invalid path value");
+  if (!fs.stat(folder)) throw new Error("This path does not exist");
+  return folder;
+}
