@@ -34,9 +34,10 @@ export async function getAccountFrom(
   passphrase: string,
   folder?: string
 ): Promise<Account> {
-  if (!/^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i.test(uuid)) {
+  if (!/^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i.test(uuid))
     throw new Error("UUID format mismatch");
-  }
+  if (!(await listAccounts(folder)).find(v => v.match(uuid)))
+    throw new Error("No matching UUID filename found in folder")
 
   const privKey: Wallet = await Wallet.fromV3(
     await fs.readFile(
