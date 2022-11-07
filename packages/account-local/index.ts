@@ -1,5 +1,5 @@
-import { Account } from "../sign";
-import { KEYSTORE_PATH, UTC_FILE_PATTERN } from "./util";
+import { Account } from "@planetarium/sign";
+import { UTC_FILE_PATTERN, keypathSanitizer } from "./util";
 import fs from "fs/promises";
 import path from "path";
 import Wallet from "ethereumjs-wallet";
@@ -7,21 +7,17 @@ import secp from "@noble/secp256k1";
 
 /**
  * account-local
- * 
+ *
  * Gets Web3 Secret Storage formatted keyfile as key source and creates account.
  * https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition
- * 
+ *
  * Default filepath of "listAccounts" is planetarium's usual keystore path,
  * Defined and provided as constant in util.ts
  */
 
-export async function listAccounts(
-  folder: string | undefined = KEYSTORE_PATH[process.platform]
-): Promise<string[]> {
-  if (typeof folder !== "string") throw new Error("Invalid path value");
-  if (!fs.stat(folder)) throw new Error("This path does not exist");
-  const list = (await fs.readdir(folder))
-    .map((f) => f.match(UTC_FILE_PATTERN)?.[1])
+export async function listAccounts(folder?: string): Promise<string[]> {
+  const list = (await fs.readdir(await keypathSanitizer(folder)))
+    .map((f) => f.match(UTC_FILE_PATTERN)?.[0])
     .filter((v): v is string => !!v);
   if (list.length <= 0) {
     throw new Error("No keys found in folder");
@@ -38,10 +34,13 @@ export async function getAccountFrom(
     throw new Error("UUID format mismatch");
   if (!(await listAccounts(folder)).find(v => v.match(uuid)))
     throw new Error("No matching UUID filename found in folder")
-
+  
   const privKey: Wallet = await Wallet.fromV3(
     await fs.readFile(
-      (await listAccounts(folder)).find((v) => v === uuid) ?? "",
+      path.resolve(
+        await keypathSanitizer(folder),
+        (await listAccounts(folder)).find((v) => v.match(uuid)) ?? ""
+      ),
       "utf8"
     ),
     passphrase
