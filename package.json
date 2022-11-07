@@ -4,7 +4,7 @@
     "packages/*",
     "tests"
   ],
-  "packageManager": "yarn@3.2.3",
+  "packageManager": "yarn@3.2.4",
   "scripts": {
     "build": "yarn workspaces foreach run build -t",
     "publish": "yarn workspaces foreach --no-private npm publish --access public"
