@@ -40,7 +40,7 @@ export async function signTransaction(
 
   const txBinary = hexToBytes(tx);
   const decodedTx: BencodexDict = decode(new Buffer(txBinary));
-
+  const txPublicKey = await account.getPublicKey(false);
   const hash = await crypto.subtle.digest("SHA-256", txBinary);
   const signature = await account.sign(new Uint8Array(hash));
 
@@ -50,6 +50,16 @@ export async function signTransaction(
     )
   )
     throw new Error("Already signed.");
+
+  if (
+    Array.from(decodedTx.entries()).some(
+      ([key, value]: [Buffer, unknown]) =>
+        key[0] === 0x70 && bytesToHex(value) !== bytesToHex(txPublicKey)
+    )
+  )
+    throw new Error(
+      "Public key from unsigned TX mismatches with public key derived from signing private key"
+    );
 
   decodedTx.set(new Uint8Array([0x53]), signature.buffer);
 
@@ -63,6 +73,6 @@ export async function deriveAddress(account: Account) {
   );
 }
 
-export async function getEncodedPublicKey(account: Account){
+export async function getEncodedPublicKey(account: Account) {
   return bytesToHex(await account.getPublicKey());
 }
