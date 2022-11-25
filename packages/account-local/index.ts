@@ -54,7 +54,7 @@ export async function getAccountFrom(
       return secp.utils.concatBytes(new Uint8Array([0x04]), publicKey)
     },
     sign(hash) {
-      return secp.sign(hash, privKey.getPrivateKeyString());
+      return secp.sign(hash, privKey.getPrivateKey());
     },
   };
 }
