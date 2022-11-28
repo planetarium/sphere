@@ -1,8 +1,8 @@
 import { Account } from "@planetarium/sign";
-import { UTC_FILE_PATTERN, sanitizeKeypath } from "./util";
+import { sanitizeKeypath, listKeystoreFiles } from "./util";
+import { decipherV3 } from "./v3";
 import fs from "fs/promises";
 import path from "path";
-import Wallet from "ethereumjs-wallet";
 import * as secp from "@noble/secp256k1";
 
 /**
@@ -15,46 +15,39 @@ import * as secp from "@noble/secp256k1";
  * Defined and provided as constant in util.ts
  */
 
-export async function listAccounts(folder?: string): Promise<string[]> {
-  const list = (await fs.readdir(await sanitizeKeypath(folder)))
-    .map((f) => f.match(UTC_FILE_PATTERN)?.[0])
-    .filter((v): v is string => !!v);
-  if (list.length <= 0) {
-    throw new Error("No keys found in folder");
-  }
-  return list;
-}
-
-export async function getAccountFrom(
+export async function getAccountFromFile(
   uuid: string,
   passphrase: string,
   folder?: string
 ): Promise<Account> {
   if (!/^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i.test(uuid))
     throw new Error("UUID format mismatch");
-  if (!(await listAccounts(folder)).find(v => v.match(uuid)))
-    throw new Error("No matching UUID filename found in folder")
-  
-  const privKey: Wallet = await Wallet.fromV3(
-    await fs.readFile(
-      path.resolve(
-        await sanitizeKeypath(folder),
-        (await listAccounts(folder)).find((v) => v.match(uuid)) ?? ""
-      ),
-      "utf8"
+  if (!(await listKeystoreFiles(folder)).find((v) => v.match(uuid)))
+    throw new Error("No matching UUID filename found in folder");
+  const V3Keystore = await fs.readFile(
+    path.resolve(
+      await sanitizeKeypath(folder),
+      (await listKeystoreFiles(folder)).find((v) => v.match(uuid)) ?? ""
     ),
-    passphrase
-  );
+    "utf8"
+  )
+  return getAccountFromV3(V3Keystore, passphrase);
+}
 
+export async function getAccountFromV3(V3Keystore: string, passphrase: string): Promise<Account> {
   return {
     VERSION: 0,
     getPublicKey(isCompressed: boolean = true) {
-      const publicKey = new Uint8Array(privKey.getPublicKey());
-      if(isCompressed) return secp.utils.concatBytes(new Uint8Array([0x03]), publicKey.slice(0,32))
-      return secp.utils.concatBytes(new Uint8Array([0x04]), publicKey)
+      const publicKey = new Uint8Array(decipherV3(V3Keystore, passphrase).getPublicKey());
+      if (isCompressed)
+        return secp.utils.concatBytes(
+          new Uint8Array([0x03]),
+          publicKey.slice(0, 32)
+        );
+      return secp.utils.concatBytes(new Uint8Array([0x04]), publicKey);
     },
     sign(hash) {
-      return secp.sign(hash, privKey.getPrivateKey());
+      return secp.sign(hash, decipherV3(V3Keystore, passphrase).getPrivateKey());
     },
   };
 }
