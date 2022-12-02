@@ -49,3 +49,13 @@ export async function sanitizeKeypath(folder: string | undefined = KEYSTORE_PATH
   if (!fs.stat(folder)) throw new Error("This path does not exist");
   return folder;
 }
+
+export async function listKeystoreFiles(folder?: string): Promise<string[]> {
+  const list = (await fs.readdir(await sanitizeKeypath(folder)))
+    .map((f) => f.match(UTC_FILE_PATTERN)?.[0])
+    .filter((v): v is string => !!v);
+  if (list.length <= 0) {
+    throw new Error("No keys found in folder");
+  }
+  return list;
+}
