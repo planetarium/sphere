@@ -1,6 +1,6 @@
 {
   "name": "@planetarium/sign",
-  "version": "0.0.4",
+  "version": "0.0.7",
   "type": "module",
   "license": "LGPL",
   "source": "src/index.ts",
@@ -24,7 +24,7 @@
     "require": "./dist/index.cjs",
     "node": "./dist/index.mjs",
     "import": "./dist/index.esm.js",
-    "types": "./dist/index.d.ts"
+    "types": "./dist/src/index.d.ts"
   },
   "dependencies": {
     "@noble/hashes": "^1.1.2",
