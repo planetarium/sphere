@@ -1,6 +1,6 @@
 import { Account } from "@planetarium/sign";
 import { sanitizeKeypath, listKeystoreFiles, UTC_FILE_PATTERN } from "./util";
-import { decipherV3 } from "./v3";
+import { decipherV3, V3Keystore, rawPrivateKeyToV3 } from "./v3";
 import fs from "fs/promises";
 import path from "path";
 import * as secp from "@noble/secp256k1";
@@ -52,6 +52,6 @@ export async function getAccountFromV3(V3Keystore: string, passphrase: string): 
   };
 }
 
-export const utils = {
-  sanitizeKeypath, listKeystoreFiles, UTC_FILE_PATTERN
+export {
+  rawPrivateKeyToV3, sanitizeKeypath, listKeystoreFiles, UTC_FILE_PATTERN, V3Keystore
 }
