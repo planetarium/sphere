@@ -1,4 +1,5 @@
 import { homedir } from "os";
+import { readdirSync } from "fs";
 import fs from "fs/promises";
 import path from "path";
 
@@ -44,14 +45,14 @@ const KEYSTORE_PATH: {
   haiku: undefined,
 };
 
-export async function sanitizeKeypath(folder: string | undefined = KEYSTORE_PATH[process.platform]){
+export function sanitizeKeypath(folder: string | undefined = KEYSTORE_PATH[process.platform]){
   if (typeof folder !== "string") throw new Error("Invalid path value");
   if (!fs.stat(folder)) throw new Error("This path does not exist");
   return folder;
 }
 
-export async function listKeystoreFiles(folder?: string): Promise<string[]> {
-  const list = (await fs.readdir(await sanitizeKeypath(folder)))
+export function listKeystoreFiles(folder?: string): string[] {
+  const list = (readdirSync(sanitizeKeypath(folder)))
     .map((f) => f.match(UTC_FILE_PATTERN)?.[0])
     .filter((v): v is string => !!v);
   if (list.length <= 0) {
