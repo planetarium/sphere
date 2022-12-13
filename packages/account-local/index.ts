@@ -22,12 +22,12 @@ export async function getAccountFromFile(
 ): Promise<Account> {
   if (!/^[\da-f]{8}-(?:[\da-f]{4}-){3}[\da-f]{12}$/i.test(uuid))
     throw new Error("UUID format mismatch");
-  if (!(await listKeystoreFiles(folder)).find((v) => v.match(uuid)))
+  if (!listKeystoreFiles(folder).find((v) => v.match(uuid)))
     throw new Error("No matching UUID filename found in folder");
   const V3Keystore = await fs.readFile(
     path.resolve(
-      await sanitizeKeypath(folder),
-      (await listKeystoreFiles(folder)).find((v) => v.match(uuid)) ?? ""
+      sanitizeKeypath(folder),
+      listKeystoreFiles(folder).find((v) => v.match(uuid)) ?? ""
     ),
     "utf8"
   )
@@ -40,11 +40,11 @@ export async function getAccountFromV3(V3Keystore: string, passphrase: string): 
     getPublicKey(isCompressed: boolean = true) {
       const publicKey = new Uint8Array(decipherV3(V3Keystore, passphrase).getPublicKey());
       if (isCompressed)
-        return secp.utils.concatBytes(
+        return Promise.resolve(secp.utils.concatBytes(
           new Uint8Array([0x03]),
           publicKey.slice(0, 32)
-        );
-      return secp.utils.concatBytes(new Uint8Array([0x04]), publicKey);
+        ));
+      return Promise.resolve(secp.utils.concatBytes(new Uint8Array([0x04]), publicKey));
     },
     sign(hash) {
       return secp.sign(hash, decipherV3(V3Keystore, passphrase).getPrivateKey());
