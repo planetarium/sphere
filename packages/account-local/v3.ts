@@ -6,7 +6,7 @@ import Wallet from "ethereumjs-wallet";
 // code from https://github.com/ethereumjs/ethereumjs-wallet/blob/4cccc623f30839ceb53a007d5a0cce452a0dff88/src/index.ts#L662
 
 // https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition
-interface V3Keystore {
+export interface V3Keystore {
   crypto: {
     cipher: string;
     cipherparams: {
@@ -19,6 +19,7 @@ interface V3Keystore {
   };
   id: string;
   version: number;
+  address: string;
 }
 
 interface PBKDFParamsOut {
@@ -105,4 +106,21 @@ function runCipherBuffer(
   data: Buffer
 ): Buffer {
   return Buffer.concat([cipher.update(data), cipher.final()]);
+}
+
+export async function rawPrivateKeyToV3(
+  privateKey: string,
+  passphrase: string
+) {
+  try {
+    const wallet = new Wallet(Buffer.from(privateKey, "hex"));
+    const v3 = await wallet.toV3(passphrase);
+    Object.defineProperty(v3, "address", wallet.getAddressString);
+    return {
+      filename: wallet.getV3Filename(Date.now()),
+      data: JSON.stringify(v3),
+    };
+  } catch (e) {
+    console.error(e);
+  }
 }
