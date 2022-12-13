@@ -1,12 +1,12 @@
 {
   "name": "@planetarium/sign",
-  "version": "0.0.7",
+  "version": "0.0.9",
   "type": "module",
   "license": "LGPL",
   "source": "src/index.ts",
   "module": "dist/index.esm.js",
   "main": "dist/index.cjs",
-  "types": "dist/index.d.ts",
+  "types": "dist/src/index.d.ts",
   "files": [
     "dist/**/*"
   ],
@@ -21,10 +21,10 @@
     }
   },
   "exports": {
+    "types": "./dist/src/index.d.ts",
     "require": "./dist/index.cjs",
     "node": "./dist/index.mjs",
-    "import": "./dist/index.esm.js",
-    "types": "./dist/src/index.d.ts"
+    "import": "./dist/index.esm.js"
   },
   "dependencies": {
     "@noble/hashes": "^1.1.2",
