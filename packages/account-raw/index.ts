@@ -13,6 +13,9 @@ export function createAccount(privateKey?: string | Uint8Array): Account {
     typeof privateKey === "string"
       ? secp.utils.hexToBytes(privateKey)
       : privateKey ?? secp.utils.randomPrivateKey();
+  if (!secp.utils.isValidPrivateKey(privKey)){
+    throw new Error(`Is not valid private key.`)
+  }
   if (privKey.length !== 32){
     throw new Error(`Expected 32 bytes of private key, got ${privKey.length}`)
   }
