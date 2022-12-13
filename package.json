@@ -7,7 +7,8 @@
   "packageManager": "yarn@3.2.4",
   "scripts": {
     "build": "yarn workspaces foreach run build -t",
-    "publish": "yarn workspaces foreach --no-private npm publish --access public"
+    "publish": "yarn workspaces foreach --no-private npm publish --access public",
+    "clean": "yarn workspaces foreach -p exec rm -rf dist"
   },
   "devDependencies": {
     "@typescript-eslint/eslint-plugin": "^5.38.0",
