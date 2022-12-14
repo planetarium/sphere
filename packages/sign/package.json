@@ -1,6 +1,6 @@
 {
   "name": "@planetarium/sign",
-  "version": "0.0.9",
+  "version": "0.0.11",
   "type": "module",
   "license": "LGPL",
   "source": "src/index.ts",
@@ -17,7 +17,7 @@
     },
     "#buffer": {
       "node": "node:buffer",
-      "default": "buffer/"
+      "default": "buffer/index.js"
     }
   },
   "exports": {
