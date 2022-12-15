@@ -30,28 +30,52 @@ export async function getAccountFromFile(
       listKeystoreFiles(folder).find((v) => v.match(uuid)) ?? ""
     ),
     "utf8"
-  )
+  );
   return getAccountFromV3(V3Keystore, passphrase);
 }
 
-export async function getAccountFromV3(V3Keystore: string, passphrase: string): Promise<Account> {
-  return {
-    VERSION: 0,
-    getPublicKey(isCompressed: boolean = true) {
-      const publicKey = new Uint8Array(decipherV3(V3Keystore, passphrase).getPublicKey());
-      if (isCompressed)
-        return Promise.resolve(secp.utils.concatBytes(
-          new Uint8Array([0x03]),
-          publicKey.slice(0, 32)
-        ));
-      return Promise.resolve(secp.utils.concatBytes(new Uint8Array([0x04]), publicKey));
-    },
-    sign(hash) {
-      return secp.sign(hash, decipherV3(V3Keystore, passphrase).getPrivateKey());
-    },
-  };
+export async function getAccountFromV3(
+  V3Keystore: string,
+  passphrase: string
+): Promise<Account> {
+  return new Promise<Account>((resolve, reject) => {
+    try {
+      decipherV3(V3Keystore, passphrase);
+    } catch (e) {
+      console.error(e);
+      reject(e);
+    }
+    resolve({
+      VERSION: 0,
+      getPublicKey(isCompressed: boolean = true) {
+        const publicKey = new Uint8Array(
+          decipherV3(V3Keystore, passphrase).getPublicKey()
+        );
+        if (isCompressed)
+          return Promise.resolve(
+            secp.utils.concatBytes(
+              new Uint8Array([0x03]),
+              publicKey.slice(0, 32)
+            )
+          );
+        return Promise.resolve(
+          secp.utils.concatBytes(new Uint8Array([0x04]), publicKey)
+        );
+      },
+      sign(hash) {
+        return secp.sign(
+          hash,
+          decipherV3(V3Keystore, passphrase).getPrivateKey()
+        );
+      },
+    });
+  });
 }
 
 export {
-  rawPrivateKeyToV3, sanitizeKeypath, listKeystoreFiles, UTC_FILE_PATTERN, V3Keystore
-}
+  rawPrivateKeyToV3,
+  sanitizeKeypath,
+  listKeystoreFiles,
+  UTC_FILE_PATTERN,
+  V3Keystore,
+};
