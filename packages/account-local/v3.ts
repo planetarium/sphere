@@ -114,12 +114,9 @@ export async function rawPrivateKeyToV3(
 ) {
   try {
     const wallet = new Wallet(Buffer.from(privateKey, "hex"));
-    const v3 = await wallet.toV3(passphrase);
-    Object.defineProperty(v3, "address", wallet.getAddressString);
-    return {
-      filename: wallet.getV3Filename(Date.now()),
-      data: JSON.stringify(v3),
-    };
+    //@ts-ignore - V3Keystore need address
+    const v3: V3Keystore = await wallet.toV3(passphrase);
+    return v3
   } catch (e) {
     console.error(e);
   }
