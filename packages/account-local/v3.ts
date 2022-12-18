@@ -1,8 +1,9 @@
-import { syncScrypt } from "scrypt-js";
+import { scrypt } from "@noble/hashes/scrypt";
 import { keccak_256 } from "@noble/hashes/sha3";
 import { bytesToHex } from "@noble/hashes/utils";
 import * as crypto from "crypto";
-import Wallet from "ethereumjs-wallet";
+const Wallet = require("ethereumjs-wallet").default;
+
 // code from https://github.com/ethereumjs/ethereumjs-wallet/blob/4cccc623f30839ceb53a007d5a0cce452a0dff88/src/index.ts#L662
 
 // https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition
@@ -43,7 +44,7 @@ export function decipherV3(
   input: string | V3Keystore,
   password: string,
   nonStrict = false
-): Wallet {
+) {
   const json: V3Keystore =
     typeof input === "object"
       ? input
@@ -58,13 +59,15 @@ export function decipherV3(
     kdfparams = json.crypto.kdfparams;
 
     // FIXME: support progress reporting callback
-    derivedKey = syncScrypt(
+    derivedKey = scrypt(
       Buffer.from(password),
       Buffer.from(kdfparams.salt, "hex"),
-      kdfparams.n,
-      kdfparams.r,
-      kdfparams.p,
-      kdfparams.dklen
+      {
+      N: kdfparams.n,
+      r: kdfparams.r,
+      p: kdfparams.p,
+      dkLen: kdfparams.dklen
+      }
     );
   } else if (json.crypto.kdf === "pbkdf2") {
     kdfparams = json.crypto.kdfparams;
