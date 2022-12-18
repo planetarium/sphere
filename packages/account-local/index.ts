@@ -73,6 +73,7 @@ export async function getAccountFromV3(
 }
 
 export {
+  decipherV3,
   rawPrivateKeyToV3,
   sanitizeKeypath,
   listKeystoreFiles,
