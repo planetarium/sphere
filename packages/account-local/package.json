@@ -1,6 +1,6 @@
 {
   "name": "@planetarium/account-local",
-  "version": "0.0.12",
+  "version": "0.0.13",
   "license": "LGPL",
   "source": "index.ts",
   "module": "dist/index.mjs",
@@ -31,7 +31,7 @@
     "require": "./dist/index.cjs",
     "node": "./dist/index.mjs",
     "import": "./dist/index.esm.js",
-    "types": "./dist/index.d.ts"
+    "types": ["./dist/index.d.ts", "./dist/util.d.ts", "./dist/v3.d.ts"]
   },
   "peerDependencies": {
     "@planetarium/sign": "workspace:^"

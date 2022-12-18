@@ -1,6 +1,7 @@
 import { Account } from "@planetarium/sign";
 import { sanitizeKeypath, listKeystoreFiles, UTC_FILE_PATTERN } from "./util";
 import { decipherV3, V3Keystore, rawPrivateKeyToV3 } from "./v3";
+import Wallet from "ethereumjs-wallet";
 import fs from "fs/promises";
 import path from "path";
 import * as secp from "@noble/secp256k1";
