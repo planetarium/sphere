@@ -47,7 +47,7 @@ const KEYSTORE_PATH: {
 
 export function sanitizeKeypath(folder: string | undefined = KEYSTORE_PATH[process.platform]){
   if (typeof folder !== "string") throw new Error("Invalid path value");
-  if (!fs.stat(folder)) throw new Error("This path does not exist");
+  if (!fs.existsSync(folder)) throw new Error("This path does not exist");
   return folder;
 }
 
