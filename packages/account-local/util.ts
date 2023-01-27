@@ -1,6 +1,5 @@
 import { homedir } from "os";
-import { readdirSync } from "fs";
-import fs from "fs/promises";
+import { readdirSync, existsSync } from "fs";
 import path from "path";
 
 export const UTC_FILE_PATTERN =
@@ -47,7 +46,7 @@ const KEYSTORE_PATH: {
 
 export function sanitizeKeypath(folder: string | undefined = KEYSTORE_PATH[process.platform]){
   if (typeof folder !== "string") throw new Error("Invalid path value");
-  if (!fs.existsSync(folder)) throw new Error("This path does not exist");
+  if (!existsSync(folder)) throw new Error("This path does not exist");
   return folder;
 }
 
