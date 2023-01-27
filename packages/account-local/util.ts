@@ -44,7 +44,11 @@ const KEYSTORE_PATH: {
   haiku: undefined,
 };
 
-export function sanitizeKeypath(folder: string | undefined = KEYSTORE_PATH[process.platform]){
+export function getDefaultKeystorePath(platform: string) {
+  return KEYSTORE_PATH[platform];
+}
+
+export function sanitizeKeypath(folder: string | undefined = getDefaultKeystorePath(process.platform)){
   if (typeof folder !== "string") throw new Error("Invalid path value");
   if (!existsSync(folder)) throw new Error("This path does not exist");
   return folder;
