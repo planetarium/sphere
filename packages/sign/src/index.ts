@@ -67,7 +67,7 @@ export async function signTransaction(
 }
 
 export async function deriveAddress(account: Account) {
-  const publicKey = await account.getPublicKey();
+  const publicKey = await account.getPublicKey(false);
   return (
     "0x" + toChecksum(bytesToHex(keccak_256(publicKey.slice(1))).slice(-40))
   );

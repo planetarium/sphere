@@ -1,6 +1,6 @@
 {
   "name": "@planetarium/sign",
-  "version": "0.0.11",
+  "version": "0.0.12",
   "type": "module",
   "license": "LGPL",
   "source": "src/index.ts",
