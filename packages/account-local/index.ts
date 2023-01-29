@@ -1,5 +1,5 @@
 import { Account } from "@planetarium/sign";
-import { sanitizeKeypath, listKeystoreFiles, UTC_FILE_PATTERN } from "./util";
+import { sanitizeKeypath, listKeystoreFiles, UTC_FILE_PATTERN, getDefaultKeystorePath } from "./util";
 import { decipherV3, V3Keystore, rawPrivateKeyToV3 } from "./v3";
 import fs from "fs/promises";
 import path from "path";
@@ -76,6 +76,7 @@ export {
   decipherV3,
   rawPrivateKeyToV3,
   sanitizeKeypath,
+  getDefaultKeystorePath,
   listKeystoreFiles,
   UTC_FILE_PATTERN,
   V3Keystore,
