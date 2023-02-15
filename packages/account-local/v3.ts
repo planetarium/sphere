@@ -100,7 +100,13 @@ export function decipherV3(
     derivedKey.slice(0, 16),
     Buffer.from(json.crypto.cipherparams.iv, "hex")
   );
-  const seed = runCipherBuffer(decipher, ciphertext);
+  let seed = runCipherBuffer(decipher, ciphertext);
+  
+  if (seed.length < 32){
+    // We shouldn't pad like this.
+    seed = Buffer.from(seed.toString("hex").padStart(64, "0"), "hex");
+  }
+
   return new Wallet(seed);
 }
 
