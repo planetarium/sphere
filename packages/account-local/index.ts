@@ -4,6 +4,7 @@ import { decipherV3, V3Keystore, rawPrivateKeyToV3 } from "./v3";
 import fs from "fs/promises";
 import path from "path";
 import * as secp from "@noble/secp256k1";
+import { ethers } from "ethers";
 
 /**
  * account-local
@@ -48,8 +49,13 @@ export async function getAccountFromV3(
     resolve({
       VERSION: 0,
       getPublicKey(isCompressed: boolean = true) {
-        const publicKey = new Uint8Array(
-          decipherV3(V3Keystore, passphrase).getPublicKey()
+        const signingKey = new ethers.SigningKey(
+          secp.utils.hexToBytes(
+            decipherV3(V3Keystore, passphrase).privateKey.substring(2)
+          )
+        );
+        const publicKey = secp.utils.hexToBytes(
+          signingKey.publicKey.substring(2)
         );
         if (isCompressed)
           return Promise.resolve(
@@ -65,7 +71,7 @@ export async function getAccountFromV3(
       sign(hash) {
         return secp.sign(
           hash,
-          decipherV3(V3Keystore, passphrase).getPrivateKey()
+          decipherV3(V3Keystore, passphrase).privateKey.substring(2)
         );
       },
     });

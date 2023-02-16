@@ -1,10 +1,5 @@
-import { scrypt } from "@noble/hashes/scrypt";
-import { keccak_256 } from "@noble/hashes/sha3";
-import { bytesToHex } from "@noble/hashes/utils";
-import * as crypto from "crypto";
-import { Wallet } from "./wallet";
-
-// code from https://github.com/ethereumjs/ethereumjs-wallet/blob/4cccc623f30839ceb53a007d5a0cce452a0dff88/src/index.ts#L662
+import { ethers } from "ethers";
+import { utils } from "@noble/secp256k1"
 
 // https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition
 export interface V3Keystore {
@@ -45,76 +40,11 @@ export function decipherV3(
   password: string,
   nonStrict = false
 ) {
-  const json: V3Keystore =
-    typeof input === "object"
-      ? input
-      : JSON.parse(nonStrict ? input.toLowerCase() : input);
-
-  if (json.version !== 3) {
-    throw new Error("Not a V3 wallet");
-  }
-
-  let derivedKey: Uint8Array, kdfparams: any;
-  if (json.crypto.kdf === "scrypt") {
-    kdfparams = json.crypto.kdfparams;
-
-    // FIXME: support progress reporting callback
-    derivedKey = scrypt(
-      Buffer.from(password),
-      Buffer.from(kdfparams.salt, "hex"),
-      {
-      N: kdfparams.n,
-      r: kdfparams.r,
-      p: kdfparams.p,
-      dkLen: kdfparams.dklen
-      }
-    );
-  } else if (json.crypto.kdf === "pbkdf2") {
-    kdfparams = json.crypto.kdfparams;
-
-    if (kdfparams.prf !== "hmac-sha256") {
-      throw new Error("Unsupported parameters to PBKDF2");
-    }
-
-    derivedKey = crypto.pbkdf2Sync(
-      Buffer.from(password),
-      Buffer.from(kdfparams.salt, "hex"),
-      kdfparams.c,
-      kdfparams.dklen,
-      "sha256"
-    );
-  } else {
-    throw new Error("Unsupported key derivation scheme");
-  }
-
-  const ciphertext = Buffer.from(json.crypto.ciphertext, "hex");
-  const mac = keccak_256(
-    Buffer.concat([Buffer.from(derivedKey.slice(16, 32)), ciphertext])
-  );
-  if (bytesToHex(mac) !== json.crypto.mac) {
-    throw new Error("Key derivation failed - possibly wrong passphrase");
-  }
-
-  const decipher = crypto.createDecipheriv(
-    json.crypto.cipher,
-    derivedKey.slice(0, 16),
-    Buffer.from(json.crypto.cipherparams.iv, "hex")
-  );
-  let seed = runCipherBuffer(decipher, ciphertext);
-  
-  if (seed.length < 32){
-    // We shouldn't pad like this.
-    seed = Buffer.from(seed.toString("hex").padStart(64, "0"), "hex");
-  }
-
-  return new Wallet(seed);
-}
-
-function runCipherBuffer(
-  cipher: crypto.Cipher | crypto.Decipher,
-  data: Buffer
-): Buffer {
-  return Buffer.concat([cipher.update(data), cipher.final()]);
+  const json = typeof input === "object"
+    ? JSON.stringify(input)
+    : (nonStrict ? input.toLowerCase() : input);
+  const decrypted = ethers.decryptKeystoreJsonSync(json, password);
+  return decrypted;
 }
 
 export async function rawPrivateKeyToV3(
@@ -122,10 +52,13 @@ export async function rawPrivateKeyToV3(
   passphrase: string
 ) {
   try {
-    const wallet = new Wallet(Buffer.from(privateKey, "hex"));
-    //@ts-ignore - V3Keystore need address
-    const v3: V3Keystore = await wallet.toV3(passphrase);
-    return v3
+    const signingKey = new ethers.SigningKey(utils.hexToBytes(privateKey));
+    const encryptedJson = await ethers.encryptKeystoreJson({
+      address: ethers.computeAddress(signingKey),
+      privateKey: signingKey.privateKey,
+    }, passphrase);
+
+    return encryptedJson;
   } catch (e) {
     console.error(e);
   }
