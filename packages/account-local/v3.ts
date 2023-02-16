@@ -1,4 +1,5 @@
-import ethers from "ethers";
+import { ethers } from "ethers";
+import { utils } from "@noble/secp256k1"
 
 // https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition
 export interface V3Keystore {
@@ -51,7 +52,7 @@ export async function rawPrivateKeyToV3(
   passphrase: string
 ) {
   try {
-    const signingKey = new ethers.SigningKey(Buffer.from(privateKey, "hex"));
+    const signingKey = new ethers.SigningKey(utils.hexToBytes(privateKey));
     const encryptedJson = await ethers.encryptKeystoreJson({
       address: ethers.computeAddress(signingKey),
       privateKey: signingKey.privateKey,
