@@ -1,0 +1,56 @@
+{
+  "name": "@planetarium/account-web",
+  "version": "0.0.38",
+  "license": "LGPL",
+  "source": "index.ts",
+  "module": "dist/index.mjs",
+  "main": "dist/index.cjs",
+  "types": "dist/index.d.ts",
+  "files": [
+    "dist/**/*"
+  ],
+  "imports": {
+    "#crypto": {
+      "node": "./webcrypto/node.ts",
+      "default": "./webcrypto/browser.ts"
+    },
+    "#buffer": {
+      "node": "node:buffer",
+      "default": "buffer/"
+    }
+  },
+  "dependencies": {
+    "@noble/hashes": "^1.1.5",
+    "@noble/secp256k1": "^1.7.0",
+    "bs58check": "^2.1.2",
+    "buffer": "^6.0.3",
+    "ethereumjs-util": "^7.1.5",
+    "randombytes": "^2.1.0",
+    "uuid": "^9.0.0"
+  },
+  "devDependencies": {
+    "@planetarium/sign": "workspace:^",
+    "@types/bs58check": "^2.1.0",
+    "@types/node": "^18.7.23",
+    "@types/randombytes": "^2",
+    "@types/uuid": "^9",
+    "nanobundle": "^0.0.28"
+  },
+  "exports": {
+    "require": "./dist/index.cjs",
+    "node": "./dist/index.mjs",
+    "import": "./dist/index.esm.js",
+    "types": [
+      "./dist/index.d.ts",
+      "./dist/util.d.ts",
+      "./dist/v3.d.ts",
+      "./dist/wallet.d.ts"
+    ]
+  },
+  "peerDependencies": {
+    "@planetarium/sign": "workspace:^"
+  },
+  "scripts": {
+    "build": "nanobundle build"
+  }
+}

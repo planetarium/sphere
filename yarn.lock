@@ -1402,6 +1402,28 @@ __metadata:
   languageName: unknown
   linkType: soft
 
+"@planetarium/account-web@workspace:packages/account-web":
+  version: 0.0.0-use.local
+  resolution: "@planetarium/account-web@workspace:packages/account-web"
+  dependencies:
+    "@noble/hashes": ^1.1.5
+    "@noble/secp256k1": ^1.7.0
+    "@planetarium/sign": "workspace:^"
+    "@types/bs58check": ^2.1.0
+    "@types/node": ^18.7.23
+    "@types/randombytes": ^2
+    "@types/uuid": ^9
+    bs58check: ^2.1.2
+    buffer: ^6.0.3
+    ethereumjs-util: ^7.1.5
+    nanobundle: ^0.0.28
+    randombytes: ^2.1.0
+    uuid: ^9.0.0
+  peerDependencies:
+    "@planetarium/sign": "workspace:^"
+  languageName: unknown
+  linkType: soft
+
 "@planetarium/sign@workspace:^, @planetarium/sign@workspace:packages/sign":
   version: 0.0.0-use.local
   resolution: "@planetarium/sign@workspace:packages/sign"
