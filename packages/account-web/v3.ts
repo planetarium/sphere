@@ -63,10 +63,10 @@ export function decipherV3(
       Buffer.from(password),
       Buffer.from(kdfparams.salt, "hex"),
       {
-      N: kdfparams.n,
-      r: kdfparams.r,
-      p: kdfparams.p,
-      dkLen: kdfparams.dklen
+        N: kdfparams.n,
+        r: kdfparams.r,
+        p: kdfparams.p,
+        dkLen: kdfparams.dklen,
       }
     );
   } else if (json.crypto.kdf === "pbkdf2") {
@@ -101,8 +101,8 @@ export function decipherV3(
     Buffer.from(json.crypto.cipherparams.iv, "hex")
   );
   let seed = runCipherBuffer(decipher, ciphertext);
-  
-  if (seed.length < 32){
+
+  if (seed.length < 32) {
     // We shouldn't pad like this.
     seed = Buffer.from(seed.toString("hex").padStart(64, "0"), "hex");
   }
@@ -125,7 +125,7 @@ export async function rawPrivateKeyToV3(
     const wallet = new Wallet(Buffer.from(privateKey, "hex"));
     //@ts-ignore - V3Keystore need address
     const v3: V3Keystore = await wallet.toV3(passphrase);
-    return v3
+    return v3;
   } catch (e) {
     console.error(e);
   }
