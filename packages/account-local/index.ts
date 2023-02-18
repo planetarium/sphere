@@ -51,16 +51,8 @@ export async function getAccountFromV3(
         const publicKey = new Uint8Array(
           decipherV3(V3Keystore, passphrase).getPublicKey()
         );
-        if (isCompressed)
-          return Promise.resolve(
-            secp.utils.concatBytes(
-              new Uint8Array([0x03]),
-              publicKey.slice(0, 32)
-            )
-          );
-        return Promise.resolve(
-          secp.utils.concatBytes(new Uint8Array([0x04]), publicKey)
-        );
+        
+        return Promise.resolve(secp.Point.fromHex(publicKey).toRawBytes(isCompressed));
       },
       sign(hash) {
         return secp.sign(
