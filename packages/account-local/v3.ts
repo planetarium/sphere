@@ -1,5 +1,5 @@
+import { utils } from "@noble/secp256k1";
 import { ethers } from "ethers";
-import { utils } from "@noble/secp256k1"
 
 // https://github.com/ethereum/wiki/wiki/Web3-Secret-Storage-Definition
 export interface V3Keystore {
@@ -40,10 +40,13 @@ export function decipherV3(
   password: string,
   nonStrict = false
 ) {
-  const json = typeof input === "object"
-    ? JSON.stringify(input)
-    : (nonStrict ? input.toLowerCase() : input);
-  const decrypted = ethers.decryptKeystoreJsonSync(json, password);
+  const json =
+    typeof input === "object"
+      ? JSON.stringify(input)
+      : nonStrict
+      ? input.toLowerCase()
+      : input;
+  const decrypted = ethers.Wallet.fromEncryptedJsonSync(json, password);
   return decrypted;
 }
 
@@ -53,10 +56,13 @@ export async function rawPrivateKeyToV3(
 ) {
   try {
     const signingKey = new ethers.SigningKey(utils.hexToBytes(privateKey));
-    const encryptedJson = await ethers.encryptKeystoreJson({
-      address: ethers.computeAddress(signingKey),
-      privateKey: signingKey.privateKey,
-    }, passphrase);
+    const encryptedJson = await ethers.encryptKeystoreJson(
+      {
+        address: ethers.computeAddress(signingKey),
+        privateKey: signingKey.privateKey,
+      },
+      passphrase
+    );
 
     return encryptedJson;
   } catch (e) {

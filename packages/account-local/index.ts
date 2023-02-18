@@ -1,10 +1,15 @@
+import * as secp from "@noble/secp256k1";
 import { Account } from "@planetarium/sign";
-import { sanitizeKeypath, listKeystoreFiles, UTC_FILE_PATTERN, getDefaultKeystorePath } from "./util";
-import { decipherV3, V3Keystore, rawPrivateKeyToV3 } from "./v3";
+import { ethers } from "ethers";
 import fs from "fs/promises";
 import path from "path";
-import * as secp from "@noble/secp256k1";
-import { ethers } from "ethers";
+import {
+  getDefaultKeystorePath,
+  listKeystoreFiles,
+  sanitizeKeypath,
+  UTC_FILE_PATTERN,
+} from "./util";
+import { decipherV3, rawPrivateKeyToV3, V3Keystore } from "./v3";
 
 /**
  * account-local
@@ -35,47 +40,27 @@ export async function getAccountFromFile(
   return getAccountFromV3(V3Keystore, passphrase);
 }
 
-export async function getAccountFromV3(
+export function getAccountFromV3(
   V3Keystore: string,
   passphrase: string
-): Promise<Account> {
-  return new Promise<Account>((resolve, reject) => {
-    try {
-      decipherV3(V3Keystore, passphrase);
-    } catch (e) {
-      console.error(e);
-      reject(e);
-    }
-    resolve({
-      VERSION: 0,
-      getPublicKey(isCompressed: boolean = true) {
-        const signingKey = new ethers.SigningKey(
-          secp.utils.hexToBytes(
-            decipherV3(V3Keystore, passphrase).privateKey.substring(2)
-          )
-        );
-        const publicKey = secp.utils.hexToBytes(
-          signingKey.publicKey.substring(2)
-        );
-        if (isCompressed)
-          return Promise.resolve(
-            secp.utils.concatBytes(
-              new Uint8Array([0x03]),
-              publicKey.slice(0, 32)
-            )
-          );
-        return Promise.resolve(
-          secp.utils.concatBytes(new Uint8Array([0x04]), publicKey)
-        );
-      },
-      sign(hash) {
-        return secp.sign(
-          hash,
-          decipherV3(V3Keystore, passphrase).privateKey.substring(2)
-        );
-      },
-    });
-  });
+): Account {
+  decipherV3(V3Keystore, passphrase);
+
+  return {
+    VERSION: 0,
+    async getPublicKey(isCompressed: boolean = true) {
+      const wallet = new ethers.Wallet(decipherV3(V3Keystore, passphrase));
+      const publicKey = secp.utils.hexToBytes(wallet.publicKey.substring(2));
+
+      return secp.Point.fromHex(publicKey).toRawBytes(isCompressed);
+    },
+    sign(hash) {
+      return secp.sign(
+        hash,
+        decipherV3(V3Keystore, passphrase).privateKey.substring(2)
+      );
+    },
+  };
 }
 
 export {
