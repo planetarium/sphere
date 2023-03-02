@@ -1,6 +1,6 @@
 {
   "name": "@planetarium/account-local",
-  "version": "0.0.38",
+  "version": "0.0.39",
   "license": "LGPL",
   "source": "index.ts",
   "module": "dist/index.mjs",
